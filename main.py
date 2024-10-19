@@ -16,7 +16,7 @@ async def get_tweets():
 async def main():
     await tcli.login(
         auth_info_1 = envvars['tauth1'],
-        auth_info_2 = None,
+        auth_info_2 = envvars['tauth3'],
         password = envvars['tauth2']
     )
 
