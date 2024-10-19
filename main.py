@@ -1,5 +1,5 @@
 import asyncio, twikit, atproto, json
-with open('vars.json') as f: envvars = json.load(f)
+with open('vars.json') as f: envvars = json.load(f) # passwords idk how to do that without json sorry
 
 
 
