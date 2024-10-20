@@ -46,18 +46,18 @@ bcli = atproto.Client()
 bcli.login(envvars['bauth1'], envvars['bauth2'])
 
 def post(tweet):
-    txt = tweet.fulltext
+    txt = tweet.full_text
     if tweet.retweeted_tweet:
         pos = txt.find(':')
-        txt = txt[pos+1, -1]
+        txt = txt[pos+1:]
         txt = f'Reposted from @{tweet.retweeted_tweet.user.name} : ' + txt + '\n\n'
     if tweet.quote:
-        txt = f'QRT to: https://x.com/{tweet.retweeted_tweet.user.name}/status/{tweet.quote.id}' + txt + '\n\n'
+        txt = f'QRT to: https://x.com/{tweet.quote.user.name}/status/{tweet.quote.id}' + txt + '\n\n'
     if tweet.media:
         media = []
         for m in tweet.media:
-            if m.type=='photo':
-                media.append(m.media_url)
+            if m['type']=='photo':
+                media.append(m['media_url'])
             else: # TODO
                 txt+='\nidk'
         images = []
