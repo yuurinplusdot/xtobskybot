@@ -50,9 +50,9 @@ def post(tweet):
     if tweet.retweeted_tweet:
         pos = txt.find(':')
         txt = txt[pos+1:]
-        txt = f'Reposted from @{tweet.retweeted_tweet.user.name} : ' + txt + '\n\n'
+        txt = f'Reposted from @{tweet.retweeted_tweet.user.screen_name} :\n\n' + txt
     if tweet.quote:
-        txt = f'QRT to: https://x.com/{tweet.quote.user.name}/status/{tweet.quote.id}' + txt + '\n\n'
+        txt = f'QRT to: https://x.com/{tweet.quote.user.screen_name}/status/{tweet.quote.id}\n\n' + txt
     if tweet.media:
         media = []
         for m in tweet.media:
