@@ -27,15 +27,15 @@ async def main():
         await asyncio.sleep(30)
         latest = await get_tweets()
         if before != latest:
-            print('new tweets found')
             ntwt = []
             for tw in latest:
                 if tw == before[0]:
                     break
                 ntwt.append(tw)
-            for tw in ntwt.reverse():
+            for tw in reversed(ntwt):
+                print(f'sending tweet id {tw.id}')
                 post(tw)
-            print('waiting for new tweets...')
+            print('waiting...')
         before = latest
 
 
@@ -46,15 +46,18 @@ bcli = atproto.Client()
 bcli.login(envvars['bauth1'], envvars['bauth2'])
 
 def post(tweet):
-    txt = tweet.text
-    if tweet.quote:
-        txt = f'QRT to: https://x.com/{tweet.retweeted_tweet.user.name}/status/{tweet.quote.id}' + txt + '\n\n'
+    txt = tweet.fulltext
     if tweet.retweeted_tweet:
         pos = txt.find(':')
         txt = txt[pos+1, -1]
         txt = f'Reposted from @{tweet.retweeted_tweet.user.name} : ' + txt + '\n\n'
-    if tweet.media:
-        pass # todo
+    if tweet.quote:
+        txt = f'QRT to: https://x.com/{tweet.retweeted_tweet.user.name}/status/{tweet.quote.id}' + txt + '\n\n'
+    if tweet.media: # TODO
+        media = []
+        for m in tweet.media:
+            media.append(m.media_url)
+    else: media = None
     bcli.send_post(txt)
 
 
