@@ -1,4 +1,4 @@
-import asyncio, twikit, atproto, json
+import asyncio, twikit, atproto, json, requests
 with open('vars.json') as f: envvars = json.load(f) # passwords idk how to do that without json sorry
 
 
@@ -53,12 +53,19 @@ def post(tweet):
         txt = f'Reposted from @{tweet.retweeted_tweet.user.name} : ' + txt + '\n\n'
     if tweet.quote:
         txt = f'QRT to: https://x.com/{tweet.retweeted_tweet.user.name}/status/{tweet.quote.id}' + txt + '\n\n'
-    if tweet.media: # TODO
+    if tweet.media:
         media = []
         for m in tweet.media:
-            media.append(m.media_url)
+            if m.type=='photo':
+                media.append(m.media_url)
+            else: # TODO
+                txt+='\nidk'
+        images = []
+        for m in media:
+            images.append(requests.get(m))
     else: media = None
-    bcli.send_post(txt)
+    if media: bcli.send_images(txt, images=media)
+    else: bcli.send_post(txt)
 
 
 
